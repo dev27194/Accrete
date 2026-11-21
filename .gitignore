@@ -15,3 +15,6 @@ test-vaults/
 
 # Built website (npm run build:site); hosts build it themselves
 /site/
+
+.vercel
+.env*

@@ -165,7 +165,8 @@ try {
     view.onResize();
     await wait(100);
     const graphCanvas = view.contentEl.querySelector('.sbbh-graph');
-    check('resize: canvas follows the pane', Math.abs(graphCanvas.width / devicePixelRatio - 420) < 2, graphCanvas.width);
+    const inkScale = devicePixelRatio < 2 ? devicePixelRatio * 2 : devicePixelRatio;
+    check('resize: canvas follows the pane', Math.abs(graphCanvas.width / inkScale - 420) < 2, graphCanvas.width);
     view.containerEl.style.width = '';
     await close(view);
     env.plugin.unload();
