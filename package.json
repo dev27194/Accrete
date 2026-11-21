@@ -1,6 +1,6 @@
 {
   "name": "accrete",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Accrete: your Markdown notes as a 3D black hole. A website, one-file export or Obsidian plugin; runs on the GPU.",
   "type": "module",
   "license": "MIT",
