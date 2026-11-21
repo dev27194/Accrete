@@ -26,7 +26,7 @@ export function buildNoteGraph(files, {owner = 'Accrete', clusterMode = 'auto', 
   const field = (front, name) => (front.match(new RegExp(`^${name}:\\s*(.+)$`, 'mi')) || [])[1]?.trim().replace(/^["']|["']$/g, '');
 
   const notes = [...files].sort((a, b) => (a.rel < b.rel ? -1 : a.rel > b.rel ? 1 : 0)).map(file => {
-    let text = file.text.replace(/^﻿/, '').replace(/\r\n?/g, '\n');
+    let text = file.text.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
     const fm = text.match(frontMatter);
     const front = fm ? fm[1] : '';
     if (fm) text = text.slice(fm[0].length);
