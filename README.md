@@ -14,6 +14,8 @@ Accrete comes in three forms:
 
 All three run on your own computer. Your notes are never uploaded.
 
+Accrete is only the visual. It has no note-taking app, AI or sync built in: it reads Markdown files you already have.
+
 ## Use it in the browser
 
 1. Go to **[accrete-black.vercel.app](https://accrete-black.vercel.app)**. It opens on a set of demo notes.
@@ -101,7 +103,18 @@ What it reads:
 
 Want your notes pulled in from somewhere else, refreshed on a schedule, or summarized with AI? [PROMPT.md](PROMPT.md) has a ready-made prompt to paste into [Claude](https://claude.ai). It asks where your notes live, then builds and tests a setup with you step by step.
 
+## Good to know
+
+- The sky, the Milky Way and the stars are generated on your graphics card when the map opens. No photo is used.
+- The bending of light around the hole is physically inspired, not an exact relativity simulation.
+- Notes changed since your last visit glow gold (on a first visit, the last 48 hours). To know this, the website and the one-file export remember the time of your last visit and your recent pages in your browser's local storage.
+- When you open your own notes on the website, the map is kept in your browser only so the page can reload into it. It is cleared on your next fresh visit. Nothing leaves your computer.
+- The website and the export make no network requests at all: their Content Security Policy blocks them.
+- Needs WebGL 2, which every current desktop browser has.
+
 ## For developers
+
+None of this is needed to use Accrete.
 
 You need [Node.js](https://nodejs.org) 18 or newer.
 
@@ -119,7 +132,57 @@ Open http://localhost:4321. The page is rebuilt from `src/` on every refresh, us
 | `npm run build:plugin` | Builds the Obsidian plugin (`main.js`, `styles.css`) |
 | `npm run dev:plugin` | Rebuilds the plugin on every change |
 | `npm run test:plugin` | Builds test vaults and a browser test page at `test-vaults/harness.html` |
-| `npm run lint` | Checks the code |
+| `npm run lint` | Checks the code with the same rules as Obsidian's plugin review |
+
+### Work on the plugin
+
+- **Try it in a real vault:** link (or copy) this repo folder into `<your vault>/.obsidian/plugins/accrete/` and run `npm run dev:plugin`. It rebuilds `main.js` on every change; reload Obsidian to see it.
+- **Run the tests:** `npm run test:plugin` writes test vaults to `test-vaults/` (big, empty, nested, tag-only, link-only and unicode names) that you can also open in Obsidian. It also builds `test-vaults/harness.html`, which runs the plugin against a stand-in for Obsidian in your browser. Serve it with a local web server, for example `npx http-server test-vaults`, then open `harness.html`. The tab title shows how many checks passed.
+
+### Use the map in your own page
+
+`src/blackhole.js` is an ES module you can put in any page:
+
+```js
+import { createBlackHole } from './src/blackhole.js';
+
+const map = createBlackHole(element, graph, {
+  onSelect: (node, { event }) => { /* a star was clicked; node is null for empty space */ },
+  readingPanel: false, // false: clicks only call onSelect, so you show notes your own way
+});
+map.update(newGraph);  // new data, same WebGL contexts
+map.resize();
+map.destroy();         // frees every WebGL context, animation frame and listener
+```
+
+Include `src/blackhole.css` too. `graph` uses the format below. `src/blackhole.d.ts` lists every option and method, such as `select`, `focusRegion`, `zoomBy`, `flyHome` and `resetCamera`.
+
+### Data format
+
+You can skip the importer and write the map data yourself. Start from `data/sample-graph.json`, then build a page from it:
+
+```
+node scripts/build.mjs path/to/graph.json out.html
+```
+
+```json
+{
+  "owner": "Your Name",
+  "regions": { "Projects": { "center": [-0.86, -0.04, -0.23], "spread": [0.21, 0.22, 0.2], "density": 850 } },
+  "nodes": [
+    { "title": "Garage workshop", "category": "Note", "region": "Projects", "path": "Projects/Garage.md",
+      "url": "#", "status": "unknown", "updated": "2026-11-01", "modified": 1793145600000,
+      "html": "<p>Page text as safe HTML</p>", "ideas": ["Section title"],
+      "position": [-1.09, 0.12, -0.29], "degree": 3 }
+  ],
+  "edges": [[0, 1], [1, 2]]
+}
+```
+
+- `regions` are the groups. Each node's `region` must match one of their names. About six reads best.
+- `edges` are pairs of node positions in the `nodes` list. `degree` is how many links a node has.
+- `html` is inserted as HTML, so escape or sanitize it first.
+- `ideas` is optional: the section headings inside the note, shown as small lights around the star.
 
 ### Deploy the website
 
