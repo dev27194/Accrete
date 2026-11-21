@@ -2,6 +2,8 @@
 
 Your Markdown notes as a 3D black hole you can fly through.
 
+![Accrete showing a set of demo notes as stars grouped around a black hole](media/map.png)
+
 Each note is a star. Its sections are small lights around it, links between notes curve around the hole, and folders (or tags) become groups on the disc. Select a star to read the note.
 
 **[Try the live demo](https://accrete-black.vercel.app)**
@@ -21,6 +23,8 @@ Accrete is only the visual. It has no note-taking app, AI or sync built in: it r
 1. Go to **[accrete-black.vercel.app](https://accrete-black.vercel.app)**. It opens on a set of demo notes.
 2. Click **Open your notes** and pick a folder of `.md` files. An Obsidian vault works.
 3. Drag to rotate, scroll to zoom, and select a star to open its note.
+
+![A note open in the reading panel next to the black hole, with its connected pages listed](media/note.png)
 
 The map lasts for that browser tab only. A fresh visit starts on the demo again, and **Demo** takes you back to it at any time.
 
