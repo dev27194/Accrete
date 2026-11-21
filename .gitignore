@@ -1,0 +1,17 @@
+node_modules/
+.DS_Store
+
+# Your own build contains the full text of your notes. Never commit it.
+my-brain*.html
+my-graph*.json
+
+# Obsidian plugin build output: attached to GitHub releases, never committed
+/main.js
+/styles.css
+data.json
+
+# Generated test vaults and the browser test harness (npm run test:plugin)
+test-vaults/
+
+# Built website (npm run build:site); hosts build it themselves
+/site/
